@@ -1,7 +1,7 @@
 name: Run Tests
 
 on:
-  push:
+  push: # Requirement: Run on every push [cite: 14]
 
 jobs:
   test:
@@ -16,12 +16,31 @@ jobs:
           POSTGRES_DB: asgn2
         ports:
           - 5432:5432
+        # Using health checks is more reliable than "sleep 5"
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4 # Updated from v3 [cite: 12]
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # This defines the environment so 'npm' works
 
       - name: Install dependencies
-        run: npm install
+        run: npm install # Requirement [cite: 15]
 
       - name: Run tests
-        run: npm test
+        run: npm test # Requirement [cite: 16]
+        env:
+          # Match these to your AppDataSource config
+          DB_HOST: localhost
+          DB_USER: postgres
+          DB_PASS: root
+          DB_NAME: asgn2
+          NODE_ENV: test
