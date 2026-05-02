@@ -4,11 +4,11 @@ const User = require("../entities/User");
 
 const AppDataSource = new DataSource({
   type: "postgres",
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  username: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
+  host: "localhost",
+port: 5432,
+username: "postgres",
+password: "root",
+database: "asgn2",
   synchronize: true,
   entities: [User]
 });
